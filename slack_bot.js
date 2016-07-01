@@ -1,22 +1,50 @@
-if (!process.env.token) {
-    console.log('Error: Specify token in environment');
-    process.exit(1);
-}
-
-var Botkit = require('./lib/Botkit.js');
-var os = require('os');
+var Botkit = require('botkit');
 
 var controller = Botkit.slackbot({
-    debug: true
-});
+    debug: true,
+    interactive_replies: true,
+    json_file_store: './bot_storage'
+})
 
 var bot = controller.spawn({
-    token: process.env.token
-}).startRTM();
+    token: 'xoxb-56251165760-vMGA7knE8DMMMLE9hCg8YOx6'
+})
 
+bot.startRTM(function(err,bot,payload){
+  if(err){
+    throw new Error('Could not connect to Slack')
+  }
+})
 
-controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', function(bot, message) {
+controller.hears(['who\'s the whip', 'whos the whip', 'whos whip'], 'direct_message,direct_mention,mention',
+  function(bot, message){
+    var team = message.team
+    controller.storage.teams.get(team, function(err, team_data) {
+      if(err || !team_data){
+        saveTeam(team)
+        bot.reply(message, 'There is no whip!');
+      }
+      else if(team_data.whip && team_data.whip.name){
+          bot.reply(message, 'The whip is ' + team_data.whip.name + '!!');
+      }
+      else {
+          bot.reply(message, 'There is no whip!');
+      }
+    })
+  })
 
+controller.hears(['set the whip', 'set whip', 'pick a whip', 'pick whip'], 'direct_message,direct_mention,mention,ambient',
+  function(bot, message) {
+    var team = {id: message.team};
+    controller.storage.teams.get(team.id, function(err, foundTeam){
+      console.log("Team: " + foundTeam)
+    })
+    team.whip = {name: "Baldvin"}
+    saveTeam(team.id, team.name, team.whip)
+  })
+
+controller.hears(['hello', 'waddup', 'yo'], 'direct_message,direct_mention,mention', function(bot, message) {
+  console.log(message)
     bot.api.reactions.add({
         timestamp: message.ts,
         channel: message.channel,
@@ -25,7 +53,7 @@ controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', funct
         if (err) {
             bot.botkit.log('Failed to add emoji reaction :(', err);
         }
-    });
+    })
 
 
     controller.storage.users.get(message.user, function(err, user) {
@@ -34,8 +62,8 @@ controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', funct
         } else {
             bot.reply(message, 'Hello.');
         }
-    });
-});
+    })
+})
 
 controller.hears(['call me (.*)', 'my name is (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
     var name = message.match[1];
@@ -107,8 +135,6 @@ controller.hears(['what is my name', 'who am i'], 'direct_message,direct_mention
                                 });
                             });
 
-
-
                         } else {
                             // this happens if the conversation ended prematurely for some reason
                             bot.reply(message, 'OK, nevermind!');
@@ -152,14 +178,39 @@ controller.hears(['shutdown'], 'direct_message,direct_mention,mention', function
 controller.hears(['uptime', 'identify yourself', 'who are you', 'what is your name'],
     'direct_message,direct_mention,mention', function(bot, message) {
 
-        var hostname = os.hostname();
         var uptime = formatUptime(process.uptime());
 
         bot.reply(message,
             ':robot_face: I am a bot named <@' + bot.identity.name +
-             '>. I have been running for ' + uptime + ' on ' + hostname + '.');
+             '>. I have been running for ' + uptime + '.');
 
     });
+
+function getTeamById(teamId){
+  console.log("Team ID: " + teamId)
+  controller.storage.teams.get({id:teamId}, function(err, team){
+
+    console.log("Team: " + team)
+
+    if(err) return null
+    else return team
+  })
+}
+
+function saveTeam(teamID, name, whip){
+  var newTeam = {
+                  id: teamID,
+                  name: name,
+                  whip: whip
+                }
+
+  console.log("Saving team: " + newTeam)
+  controller.storage.teams.save(newTeam, function(err) {
+      if(err){
+        bot.reply(message, 'Sorry I can\'t remember your team info now. Leave me alone');
+      }
+  })
+}
 
 function formatUptime(uptime) {
     var unit = 'second';

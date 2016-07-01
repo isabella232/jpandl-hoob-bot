@@ -4,7 +4,8 @@
   "description": "This is a chat-bot originially made for integration with the Orchid team. It's name is Hubba-Hubba (https://en.wikipedia.org/wiki/The_Hoobs)",
   "main": "slack_bot.js",
   "scripts": {
-    "start": "node slack_bot.js"
+    "start" : "node ./slack_bot.js",
+    "hot-reload" : "nodemon ./slack_bot.js"
   },
   "repository": {
     "type": "git",
