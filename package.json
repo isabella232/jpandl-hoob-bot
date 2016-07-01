@@ -1,0 +1,28 @@
+{
+  "name": "hoob-bot",
+  "version": "0.0.1",
+  "description": "This is a chat-bot originially made for integration with the Orchid team. It's name is Hubba-Hubba (https://en.wikipedia.org/wiki/The_Hoobs)",
+  "main": "slack_bot.js",
+  "scripts": {
+    "start": "node slack_bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/zendesk/jpandl-hoob-bot.git"
+  },
+  "keywords": [
+    "slack-bot",
+    "bot",
+    "bot-kit",
+    "hoob"
+  ],
+  "author": "Jacob Pandl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zendesk/jpandl-hoob-bot/issues"
+  },
+  "homepage": "https://github.com/zendesk/jpandl-hoob-bot#readme",
+  "dependencies": {
+    "botkit": "^0.2.2"
+  }
+}
