@@ -5,7 +5,7 @@
   "main": "slack_bot.js",
   "scripts": {
     "start" : "node ./slack_bot.js",
-    "hot-reload" : "nodemon ./slack_bot.js"
+    "dev" : "nodemon ./slack_bot.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,9 @@
   },
   "homepage": "https://github.com/zendesk/jpandl-hoob-bot#readme",
   "dependencies": {
-    "botkit": "^0.2.2"
+    "botkit": "^0.2.2",
+    "chrono-node": "1.2.x",
+    "natural": "0.4.x",
+    "speakeasy-nlp": "0.2.x"
   }
 }
