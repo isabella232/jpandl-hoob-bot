@@ -1,11 +1,12 @@
+
 {
   "name": "hoob-bot",
   "version": "0.0.1",
   "description": "This is a chat-bot originially made for integration with the Orchid team. It's name is Hubba-Hubba (https://en.wikipedia.org/wiki/The_Hoobs)",
   "main": "slack_bot.js",
   "scripts": {
-    "start" : "node ./slack_bot.js",
-    "dev" : "nodemon ./slack_bot.js"
+    "start": "node ./slack_bot.js",
+    "dev": "nodemon ./slack_bot.js"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,10 @@
   "dependencies": {
     "botkit": "^0.2.2",
     "chrono-node": "1.2.x",
+    "google-auth-library": "^0.9.8",
+    "googleapis": "^12.0.0",
     "natural": "0.4.x",
+    "redis": "*",
     "speakeasy-nlp": "0.2.x"
   }
 }
