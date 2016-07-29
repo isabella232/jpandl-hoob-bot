@@ -1,4 +1,3 @@
-
 {
   "name": "hoob-bot",
   "version": "0.0.1",
@@ -25,6 +24,7 @@
   },
   "homepage": "https://github.com/zendesk/jpandl-hoob-bot#readme",
   "dependencies": {
+    "bluebird": "^3.4.1",
     "botkit": "^0.2.2",
     "chrono-node": "1.2.x",
     "google-auth-library": "^0.9.8",

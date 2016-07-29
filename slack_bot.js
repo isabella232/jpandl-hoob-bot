@@ -51,9 +51,21 @@ classifier.train()
 function getLabelFunctions(label){
   const labelFunctions = {
     'hello': function (bot, message) {
-      console.log(CALENDAR.startAuth)
-      CALENDAR.startAuth()
-      bot.reply(message, "Searching calendar")
+      CALENDAR.getEvents.then(function(events) {
+        console.log(events)
+        for (var i = 0; i < events.length; i++) {
+          var event = events[i]
+          var start = event.start.dateTime || event.start.date
+          var hangoutLink = event.hangoutLink
+          const botReply = start + " - " + event.summary
+          console.log(botReply)
+          bot.reply(message, botReply)
+          // if ( hangoutLink ) console.log(hangoutLink);
+        }
+      }).catch(function(err){
+        //What happens if the promise was rejected
+        console.log(err)
+      })
     },
     'whip': function (bot, message) {
       bot.reply(message, `label: ${WHIP}`)
